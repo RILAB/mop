@@ -10,3 +10,4 @@ Run the following command to see usage options:
 
 `$ python mop.py -h`
 
+Assumes all input bam files in the required bamlist were aligned to the same reference genome. 

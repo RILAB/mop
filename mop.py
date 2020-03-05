@@ -39,8 +39,6 @@ parser.add_argument('-B', '--bedfile', nargs="?", type=argparse.FileType('w'),
 parser.add_argument('-l', '--positions_file', type=str, 
 		    help='Optional file of reference position to pass to samtools mpileup.')
 
-parser.add_argument('-f', '--reference', type=str, help="The indexed reference genome each bam was aligned to.")
-
 args = parser.parse_args()
 
 
@@ -80,18 +78,10 @@ def qual_check(parse_bam):
     return passing
 
 
-#if no reference flag is passed, run mpileup without it
-if args.reference:
-	if args.positions_file:
-		cmd = f"samtools mpileup -s -A -aa -f {args.reference} -l {args.positions_file} -b {args.bamlist}".split()
-	else:
-		cmd = f"samtools mpileup -s -A -aa  -f {args.reference} -l {args.positions_file} -b {args.bamlist}".split()
+if args.positions_file:	
+    cmd = f"samtools mpileup -s -A -aa -l {args.positions_file} -b {args.bamlist}".split()
 else:
-	if args.positions_file:	
-		cmd = f"samtools mpileup -s -A -aa -l {args.positions_file} -b {args.bamlist}".split()
-	else:
-		cmd = f"samtools mpileup -s -A -aa -b {args.bamlist}".split()
-
+    cmd = f"samtools mpileup -s -A -aa -b {args.bamlist}".split()
 
 chrom = ""
 start = -1
