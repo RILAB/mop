@@ -3,7 +3,7 @@ Simple tool for capturing alignment regions with sufficient quality for genotypi
 
 This script has only been tested on Linux systems.
 
-Requires Python libraries: `argparse`, `numpy` `os`, `re`, `io`, `subprocess`.
+Requires Python3 with libraries: `argparse`, `numpy` `os`, `re`, `io`, `subprocess`.
 Requires fully installed version of `samtools` with `mpileup`.
 
 Run the following command to see usage options:
