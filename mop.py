@@ -21,7 +21,7 @@ parser.add_argument("-M", "--mean_depth_min", type = int, default=1,
 parser.add_argument("-i", "--min_depth", type = int, default=1, 
 		    help = "Minimum number of bases required per individual after accounting for low base and mapping quality.")
 
-parser.add_argument("-m", "--depth_proportion", type = int, default=0, 
+parser.add_argument("-m", "--depth_proportion", type = float, default=0, 
 		    help = "Minimum proportion of individuals with site counts greater than --min_depth that are required for site to pass. Test is applied after accounting for low base and mapping quality.")
 
 parser.add_argument("-Q", "--map_quality", type = int, default=35, 
