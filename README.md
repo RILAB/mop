@@ -14,7 +14,7 @@ Run the following command to see usage options:
 
 which returns:
 
-`
+```
 usage: mop.py [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-i MIN_DEPTH]
               [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
               [BAMLIST] [-B [BEDFILE]] [-l POSITIONS_FILE]
@@ -49,4 +49,4 @@ optional arguments:
   -l POSITIONS_FILE, --positions_file POSITIONS_FILE
                         Optional file of reference position to pass to
                         samtools mpileup.
-`
+```
