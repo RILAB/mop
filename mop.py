@@ -16,7 +16,7 @@ parser.add_argument("-s", "--bad_sites", action='store_true',
 		    help = "Switch to return sites which fail thresholds. Default is to return passing sites.")
 
 parser.add_argument("-M", "--mean_depth_min", type = int, default=1,
-		    help = "Minium mean depth across all individuals.")
+		    help = "Minimum mean depth across all individuals.")
 
 parser.add_argument("-i", "--min_depth", type = int, default=1, 
 		    help = "Minimum number of bases required per individual after accounting for low base and mapping quality.")
