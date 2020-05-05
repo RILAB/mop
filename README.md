@@ -29,7 +29,7 @@ optional arguments:
   -s, --bad_sites       Switch to return sites which fail thresholds. Default
                         is to return passing sites.
   -M MEAN_DEPTH_MIN, --mean_depth_min MEAN_DEPTH_MIN
-                        Minium mean depth across all individuals.
+                        Minimum mean depth across all individuals.
   -i MIN_DEPTH, --min_depth MIN_DEPTH
                         Minimum number of bases required per individual after
                         accounting for low base and mapping quality.
