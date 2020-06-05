@@ -7,7 +7,7 @@ import subprocess
 
 #from parse_read import parse_read
 
-parser = argparse.ArgumentParser(description="Produces bedfile of genomic locations that did or did not map reads sufficiently well.")
+parser = argparse.ArgumentParser(description="Produces bedfile of genomic locations that did or did not map reads sufficiently well. Bed regions are Written to standard out.")
 
 parser.add_argument("-c", "--single_sites", action='store_true', 
 		    help = "Output every base separately instead of joining contiguous regions.")
@@ -19,7 +19,7 @@ parser.add_argument("-M", "--mean_depth_min", type = int, default=1,
 		    help = "Minimum mean depth across all individuals.")
 
 parser.add_argument("-i", "--min_depth", type = int, default=1, 
-		    help = "Minimum number of bases required per individual after accounting for low base and mapping quality.")
+		    help = "Minimum number of bases required per individual after accounting for low base and mapping quality. This flag should always be used in conjunction with -m.")
 
 parser.add_argument("-m", "--depth_proportion", type = float, default=0, 
 		    help = "Minimum proportion of individuals with site counts greater than --min_depth that are required for site to pass. Test is applied after accounting for low base and mapping quality.")
@@ -33,8 +33,8 @@ parser.add_argument("-q", "--base_quality", type = int, default=35,
 parser.add_argument('-b', '--bamlist', nargs="?", type=str, required = True,
 		    help='List of bam files. One per line.')
 
-parser.add_argument('-B', '--bedfile', nargs="?", type=argparse.FileType('w'), 
-		    help='Optional name of the file to write bedfile to.')
+#parser.add_argument('-B', '--bedfile', nargs="?", type=argparse.FileType('w'), 
+#		    help='Optional name of the file to write bedfile to.')
 
 parser.add_argument('-l', '--positions_file', type=str, 
 		    help='Optional file of reference position to pass to samtools mpileup.')
@@ -79,9 +79,9 @@ def qual_check(parse_bam):
 
 
 if args.positions_file:	
-    cmd = f"samtools mpileup -s -A -aa -l {args.positions_file} -b {args.bamlist}".split()
+    cmd = f"samtools mpileup -s -aa -l {args.positions_file} -b {args.bamlist}".split()
 else:
-    cmd = f"samtools mpileup -s -A -aa -b {args.bamlist}".split()
+    cmd = f"samtools mpileup -s -aa -b {args.bamlist}".split()
 
 chrom = ""
 start = -1

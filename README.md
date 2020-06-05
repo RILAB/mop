@@ -17,10 +17,10 @@ which returns:
 ```
 usage: mop.py [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-i MIN_DEPTH]
               [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
-              [BAMLIST] [-B [BEDFILE]] [-l POSITIONS_FILE]
+              [BAMLIST] [-l POSITIONS_FILE]
 
 Produces bedfile of genomic locations that did or did not map reads
-sufficiently well.
+sufficiently well. Bed regions are Written to standard out.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -32,7 +32,8 @@ optional arguments:
                         Minimum mean depth across all individuals.
   -i MIN_DEPTH, --min_depth MIN_DEPTH
                         Minimum number of bases required per individual after
-                        accounting for low base and mapping quality.
+                        accounting for low base and mapping quality. This flag
+                        should always be used in conjunction with -m.
   -m DEPTH_PROPORTION, --depth_proportion DEPTH_PROPORTION
                         Minimum proportion of individuals with site counts
                         greater than --min_depth that are required for site to
@@ -44,9 +45,8 @@ optional arguments:
                         Minimim base quality
   -b [BAMLIST], --bamlist [BAMLIST]
                         List of bam files. One per line.
-  -B [BEDFILE], --bedfile [BEDFILE]
-                        Optional name of the file to write bedfile to.
   -l POSITIONS_FILE, --positions_file POSITIONS_FILE
                         Optional file of reference position to pass to
                         samtools mpileup.
+
 ```
