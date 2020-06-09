@@ -1,0 +1,3 @@
+[console_scripts]
+mop = mop.mop:main
+

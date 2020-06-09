@@ -8,16 +8,20 @@ Requires fully installed version of `samtools` with `mpileup`.
 
 Assumes all input bam files in the required bamlist were aligned to the same reference genome. 
 
+## Installation
+
+`pip install mop-bam`
+
 Run the following command to see usage options:
 
-`$ python mop.py -h`
+`mop -h`
 
 which returns:
 
 ```
-usage: mop.py [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-i MIN_DEPTH]
-              [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
-              [BAMLIST] [-l POSITIONS_FILE]
+usage: mop [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-i MIN_DEPTH]
+           [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
+           [BAMLIST] [-l POSITIONS_FILE]
 
 Produces bedfile of genomic locations that did or did not map reads
 sufficiently well. Bed regions are Written to standard out.
@@ -48,5 +52,4 @@ optional arguments:
   -l POSITIONS_FILE, --positions_file POSITIONS_FILE
                         Optional file of reference position to pass to
                         samtools mpileup.
-
 ```

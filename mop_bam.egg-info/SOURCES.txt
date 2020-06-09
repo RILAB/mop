@@ -1,0 +1,11 @@
+README.md
+setup.py
+mop/__init__.py
+mop/mop.py
+mop_bam.egg-info/PKG-INFO
+mop_bam.egg-info/SOURCES.txt
+mop_bam.egg-info/dependency_links.txt
+mop_bam.egg-info/entry_points.txt
+mop_bam.egg-info/not-zip-safe
+mop_bam.egg-info/requires.txt
+mop_bam.egg-info/top_level.txt
