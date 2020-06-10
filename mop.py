@@ -6,9 +6,11 @@ import io
 import subprocess
 
 #from parse_read import parse_read
+
 def main():
-    
+
     prog = 'mop',
+
     parser = argparse.ArgumentParser(description="Produces bedfile of genomic locations that did or did not map reads sufficiently well. Bed regions are Written to standard out.")
 
     parser.add_argument("-c", "--single_sites", action='store_true', 
@@ -32,17 +34,25 @@ def main():
     parser.add_argument("-q", "--base_quality", type = int, default=35, 
                 help = "Minimim base quality")
 
-    parser.add_argument('-b', '--bamlist', nargs="?", type=str, required = True,
-                help='List of bam files. One per line.')
+    #parser.add_argument('-b', '--bamlist', nargs="?", type=str, required = True,
+    #            help='List of bam files. One per line.')
 
     #parser.add_argument('-B', '--bedfile', nargs="?", type=argparse.FileType('w'), 
     #		    help='Optional name of the file to write bedfile to.')
 
-    parser.add_argument('-l', '--positions_file', type=str, 
-                help='Optional file of reference position to pass to samtools mpileup.')
+    #parser.add_argument('-l', '--positions_file', type=str, 
+    #            help='Optional file of reference position to pass to samtools mpileup.')
+
+    parser.add_argument('-p', '--pilup_file', type = str, 
+                help = "Pre-made mpileup file made using samtools mpileup NOT bcftools mpileup.")
 
     args = parser.parse_args()
 
+    def openfile(filename):
+        if filename.endswith(".gz"):
+            return gzip.open(filename, "rt")
+        else:
+            return open(filename, "r")
 
     def parse_line(pileup):
         mp = pileup.strip().split("\t")
@@ -80,66 +90,74 @@ def main():
         return passing
 
 
-    if args.positions_file:	
-        cmd = f"samtools mpileup -s -aa -l {args.positions_file} -b {args.bamlist}".split()
-    else:
-        cmd = f"samtools mpileup -s -aa -b {args.bamlist}".split()
+    #if args.positions_file:	
+    #    cmd = f"samtools mpileup -s -aa -l {args.positions_file} -b {args.bamlist}".split()
+    #else:
+    #    cmd = f"samtools mpileup -s -aa -b {args.bamlist}".split()
 
     chrom = ""
     start = -1
     end = -1
     init = True   
 
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
-        line_dict = parse_line(line)
-        test = qual_check(line_dict)
+    def printer(chrom, start, end):
+        if start > 0 and  end > 0:
+            print(f"{chrom}\t{start-1}\t{end}")
+    
+    #proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    #for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
+    with openfile(args.pilup_file) as f:
+        for line in f:
+            line_dict = parse_line(line)
+            test = qual_check(line_dict)
+            if args.bad_sites:
+                if not test:
+                    if args.single_sites:
+                        chrom = line_dict['chrom']
+                        start = line_dict['pos']
+                        end = line_dict['pos']
+                        printer(chrom, start, end) 
+                    else:
+                        if line_dict['chrom'] == chrom and line_dict['pos'] == end + 1:
+                            end += 1
+                            #print('a')
+                        else:
+                            if not init:
+                                printer(chrom, start, end)
+                                chrom = line_dict['chrom']
+                                start = line_dict['pos']
+                                end = line_dict['pos']
+                                #print('b')
+                            else:
+                                chrom = line_dict['chrom']
+                                start = line_dict['pos']
+                                end = line_dict['pos']
+                                #print('c')
+                                init = False
+            else:
+                if test:
+                    if args.single_sites:
+                        chrom = line_dict['chrom']
+                        start = line_dict['pos']
+                        end = line_dict['pos']
+                        printer(chrom, start, end)
+                    else:
+                        if line_dict['chrom'] == chrom and line_dict['pos'] == end + 1:
+                            end += 1
+                            #print('a')
+                        else:
+                            if not init:
+                                printer(chrom, start, end)
+                                chrom = line_dict['chrom']
+                                start = line_dict['pos']
+                                end = line_dict['pos']
+                                #print('b')
+                            else:
+                                chrom = line_dict['chrom']
+                                start = line_dict['pos']
+                                end = line_dict['pos']
+                                #print('c')
+                                init = False
+    printer(chrom, start, end)
 
-        if args.bad_sites:
-            if not test:
-                if args.single_sites:
-                    chrom = line_dict['chrom']
-                    start = line_dict['pos']
-                    end = line_dict['pos']
-                    print(f"{chrom}\t{start-1}\t{end}")
-                else:
-                    if line_dict['chrom'] == chrom and line_dict['pos'] == end + 1:
-                        end += 1
-                        #print('a')
-                    else:
-                        if not init:
-                            print(f"{chrom}\t{start-1}\t{end}")
-                            chrom = line_dict['chrom']
-                            start = line_dict['pos']
-                            end = line_dict['pos']
-                            #print('b')
-                        else:
-                            chrom = line_dict['chrom']
-                            start = line_dict['pos']
-                            end = line_dict['pos']
-                            #print('c')
-                            init = False
-        else:
-            if test:
-                if args.single_sites:
-                    chrom = line_dict['chrom']
-                    start = line_dict['pos']
-                    end = line_dict['pos']
-                    print(f"{chrom}\t{start-1}\t{end}")
-                else:
-                    if line_dict['chrom'] == chrom and line_dict['pos'] == end + 1:
-                        end += 1
-                        #print('a')
-                    else:
-                        if not init:
-                            print(f"{chrom}\t{start-1}\t{end}")
-                            chrom = line_dict['chrom']
-                            start = line_dict['pos']
-                            end = line_dict['pos']
-                            #print('b')
-                        else:
-                            chrom = line_dict['chrom']
-                            start = line_dict['pos']
-                            end = line_dict['pos']
-                            #print('c')
-                            init = False
+main()
