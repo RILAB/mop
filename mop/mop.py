@@ -79,6 +79,11 @@ def main():
 
         return passing
 
+    def printer(chrom, start, end):
+        if start > 0 and  end > 0:
+            print(f"{chrom}\t{start-1}\t{end}")
+
+
 
     if args.positions_file:	
         cmd = f"samtools mpileup -s -aa -l {args.positions_file} -b {args.bamlist}".split()
@@ -101,14 +106,14 @@ def main():
                     chrom = line_dict['chrom']
                     start = line_dict['pos']
                     end = line_dict['pos']
-                    print(f"{chrom}\t{start-1}\t{end}")
+                    printer(chrom, start, end)
                 else:
                     if line_dict['chrom'] == chrom and line_dict['pos'] == end + 1:
                         end += 1
                         #print('a')
                     else:
                         if not init:
-                            print(f"{chrom}\t{start-1}\t{end}")
+                            printer(chrom, start, end)
                             chrom = line_dict['chrom']
                             start = line_dict['pos']
                             end = line_dict['pos']
@@ -125,14 +130,14 @@ def main():
                     chrom = line_dict['chrom']
                     start = line_dict['pos']
                     end = line_dict['pos']
-                    print(f"{chrom}\t{start-1}\t{end}")
+                    printer(chrom, start, end)
                 else:
                     if line_dict['chrom'] == chrom and line_dict['pos'] == end + 1:
                         end += 1
                         #print('a')
                     else:
                         if not init:
-                            print(f"{chrom}\t{start-1}\t{end}")
+                            printer(chrom, start, end)
                             chrom = line_dict['chrom']
                             start = line_dict['pos']
                             end = line_dict['pos']
@@ -143,3 +148,4 @@ def main():
                             end = line_dict['pos']
                             #print('c')
                             init = False
+    printer(chrom, start, end)
