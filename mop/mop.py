@@ -20,7 +20,7 @@ def main():
     parser.add_argument("-M", "--mean_depth_min", type = int, default=1,
                 help = "Minimum mean depth across all individuals.")
 
-    parser.add_argument("-x", "--max_depth", type = float, degault = float("inf"),
+    parser.add_argument("-x", "--max_depth", type = float, default = float("inf"),
                 help = "Maximum number of bases allowed per individual after accounting for low base and mapping quality. This flag should always be used in conjunction with -m.")
 
     parser.add_argument("-i", "--min_depth", type = int, default=1, 
