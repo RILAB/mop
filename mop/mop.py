@@ -20,6 +20,9 @@ def main():
     parser.add_argument("-M", "--mean_depth_min", type = int, default=1,
                 help = "Minimum mean depth across all individuals.")
 
+    parser.add_argument("-x", "--max_depth", type = float, degault = float("inf"),
+                help = "Maximum number of bases allowed per individual after accounting for low base and mapping quality. This flag should always be used in conjunction with -m.")
+
     parser.add_argument("-i", "--min_depth", type = int, default=1, 
                 help = "Minimum number of bases required per individual after accounting for low base and mapping quality. This flag should always be used in conjunction with -m.")
 
@@ -69,12 +72,14 @@ def main():
             baseq_lengths = np.array([qual_length(qs, args.base_quality) for qs in base_q])
             
             #test depth of high-quality bases per individual
-            if np.mean(baseq_lengths >= args.min_depth) >= args.depth_proportion:
+            #if np.mean(baseq_lengths >= args.min_depth) >= args.depth_proportion:
+            if np.mean(np.logical_and(baseq_lengths >= args.min_depth, baseq_lengths <= args.max_depth)) >=  args.depth_proportion:
                 map_q = np.array([pop_bam[i+3] for i in idx]) 
                 mapq_lengths = np.array([qual_length(qs, args.base_quality) for qs in map_q])
 
                 #test depth of high-quality mapping per individual
-                if np.mean(baseq_lengths >= args.min_depth) >= args.depth_proportion:
+                #if np.mean(baseq_lengths >= args.min_depth) >= args.depth_proportion:
+                if np.mean(np.logical_and(mapq_lengths >= args.min_depth, mapq_lengths <= args.max_depth)) >=  args.depth_proportion:
                     passing = True
 
         return passing
