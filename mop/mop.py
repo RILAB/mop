@@ -42,7 +42,7 @@ def main():
     #		    help='Optional name of the file to write bedfile to.')
 
     parser.add_argument('-l', '--positions_file', type=str, 
-                help='Optional file of reference position to pass to samtools mpileup.')
+                help='Optional file of reference position to pass to "samtools depth".')
 
     args = parser.parse_args()
 
@@ -51,14 +51,9 @@ def main():
         mp = pileup.strip().split("\t")
         chrom, pos, ref = mp[0:3] #site data
         pop_bam = mp[3:]
-        idx = list(range(0,len(pop_bam), 4))
+        idx = list(range(0,len(pop_bam)))
         site_dict = {"chrom": chrom, "ref": ref, "pos": int(pos), "pop_bam": pop_bam, "idx":idx}
         return site_dict
-
-
-    #each individual per site has: depth, bases, base quals, map quals
-    def qual_length(qual_string, q_min):
-        return len([ord(i) for i in qual_string if i != "*" and ord(i) > q_min])
 
     def qual_check(parse_bam):
         pop_bam = parse_bam['pop_bam']
@@ -68,19 +63,10 @@ def main():
 
         #test total depth
         if np.mean(depth) >= args.mean_depth_min:
-            base_q = np.array([pop_bam[i+2] for i in idx])
-            baseq_lengths = np.array([qual_length(qs, args.base_quality) for qs in base_q])
             
             #test depth of high-quality bases per individual
-            #if np.mean(baseq_lengths >= args.min_depth) >= args.depth_proportion:
-            if np.mean(np.logical_and(baseq_lengths >= args.min_depth, baseq_lengths <= args.max_depth)) >=  args.depth_proportion:
-                map_q = np.array([pop_bam[i+3] for i in idx]) 
-                mapq_lengths = np.array([qual_length(qs, args.base_quality) for qs in map_q])
-
-                #test depth of high-quality mapping per individual
-                #if np.mean(baseq_lengths >= args.min_depth) >= args.depth_proportion:
-                if np.mean(np.logical_and(mapq_lengths >= args.min_depth, mapq_lengths <= args.max_depth)) >=  args.depth_proportion:
-                    passing = True
+            if np.mean(np.logical_and(depth >= args.min_depth, depth <= args.max_depth)) >=  args.depth_proportion:
+                passing = True
 
         return passing
 
@@ -89,11 +75,10 @@ def main():
             print(f"{chrom}\t{start-1}\t{end}")
 
 
-
     if args.positions_file:	
-        cmd = f"samtools mpileup -s -aa -l {args.positions_file} -b {args.bamlist}".split()
+        cmd = f"samtools depth -q {args.base_quality} -Q {args.map_quality} -aa -b {args.positions_file} -f {args.bamlist}".split()
     else:
-        cmd = f"samtools mpileup -s -aa -b {args.bamlist}".split()
+        cmd = f"samtools depth -q {args.base_quality} -Q {args.map_quality} -aa -f {args.bamlist}".split()
 
     chrom = ""
     start = -1
@@ -154,3 +139,6 @@ def main():
                             #print('c')
                             init = False
     printer(chrom, start, end)
+
+
+#main()

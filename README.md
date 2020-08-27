@@ -4,7 +4,7 @@ Simple tool for capturing alignment regions with sufficient quality for genotypi
 This script has only been tested on Linux systems.
 
 Requires Python3 with libraries: `argparse`, `numpy` `os`, `re`, `io`, `subprocess`.
-Requires fully installed version of `samtools` with `mpileup`.
+Requires fully installed version of `samtools` with the `depth` utility.
 
 Assumes all input bam files in the required bamlist were aligned to the same reference genome. 
 
@@ -19,9 +19,10 @@ Run the following command to see usage options:
 which returns:
 
 ```
-usage: mop [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-i MIN_DEPTH]
-           [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
-           [BAMLIST] [-l POSITIONS_FILE]
+
+usage: mop.py [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-x MAX_DEPTH] [-i MIN_DEPTH]
+              [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
+              [BAMLIST] [-l POSITIONS_FILE]
 
 Produces bedfile of genomic locations that did or did not map reads
 sufficiently well. Bed regions are Written to standard out.
@@ -34,6 +35,10 @@ optional arguments:
                         is to return passing sites.
   -M MEAN_DEPTH_MIN, --mean_depth_min MEAN_DEPTH_MIN
                         Minimum mean depth across all individuals.
+  -x MAX_DEPTH, --max_depth MAX_DEPTH
+                        Maximum number of bases allowed per individual after
+                        accounting for low base and mapping quality. This flag
+                        should always be used in conjunction with -m.
   -i MIN_DEPTH, --min_depth MIN_DEPTH
                         Minimum number of bases required per individual after
                         accounting for low base and mapping quality. This flag
@@ -51,5 +56,8 @@ optional arguments:
                         List of bam files. One per line.
   -l POSITIONS_FILE, --positions_file POSITIONS_FILE
                         Optional file of reference position to pass to
-                        samtools mpileup.
+                        "samtools depth".
+
 ```
+
+
