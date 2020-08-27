@@ -22,7 +22,7 @@ which returns:
 
 usage: mop.py [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-x MAX_DEPTH] [-i MIN_DEPTH]
               [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
-              [BAMLIST] [-l POSITIONS_FILE]
+              [BAMLIST] [-l POSITIONS_FILE] [-R POSITIONS_STRING]
 
 Produces bedfile of genomic locations that did or did not map reads
 sufficiently well. Bed regions are Written to standard out.
@@ -57,7 +57,9 @@ optional arguments:
   -l POSITIONS_FILE, --positions_file POSITIONS_FILE
                         Optional file of reference position to pass to
                         "samtools depth".
+  -R POSITIONS_STRING, --positions_string POSITIONS_STRING
+                        Optional file of reference position to pass to
+                        "samtools depth". Requires input bam files to be indexed.
 
 ```
-
 
