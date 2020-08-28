@@ -1,4 +1,4 @@
-# mop  <a href='https://github.com/RILAB/mop'><img src='fig/mop.png' align="right" height="139" /></a>
+# mop  <a href='https://github.com/RILAB/mop'><img src='fig/mop.png' align="right" height="200" /></a>
 
 
 Simple tool for capturing alignment regions with sufficient quality for genotyping.
