@@ -8,7 +8,7 @@ long_description = 'Produces bedfile of genomic locations that did or did not ma
   
 setup( 
         name ='mop-bam', 
-        version ='0.0.3.3', 
+        version ='0.0.4.0', 
         author ='Silas Tittes', 
         author_email ='silas.tittes@gmail.com', 
         url ='https://github.com/RILAB/mop', 
