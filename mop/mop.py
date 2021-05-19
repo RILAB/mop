@@ -54,7 +54,7 @@ def main():
     def parse_line(pileup):
         mp = pileup.strip().split("\t")
         chrom, pos, ref = mp[0:3] #site data
-        pop_bam = mp[3:]
+        pop_bam = mp[2:]
         idx = list(range(0,len(pop_bam)))
         site_dict = {"chrom": chrom, "ref": ref, "pos": int(pos), "pop_bam": pop_bam, "idx":idx}
         return site_dict
@@ -82,11 +82,11 @@ def main():
     ### FOR PIXY MODE ###
     def qual_count(parse_bam):
         pop_bam = parse_bam['pop_bam']
-        idx = parse_bam['idx']
+        idx = parse_bam['idx'] 
         depth = np.array([int(pop_bam[i]) for i in idx])
-            
         #number of individuals with depth greater than the user-specified minimum
         n_ind = np.sum(depth >= args.min_depth) 
+        
         return n_ind
 
     def pixy_printer(chrom, start, end, n_ind):
