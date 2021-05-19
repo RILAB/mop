@@ -175,4 +175,4 @@ def main():
                             init = False
     printer(chrom, start, end)
 
-main()
+#main()

@@ -1,6 +1,5 @@
 # mop  <a href='https://github.com/RILAB/mop'><img src='fig/mop.png' align="right" height="200" /></a>
 
-
 Simple tool for capturing alignment regions with sufficient quality for genotyping.
 
 This script has only been tested on Linux systems.
@@ -21,10 +20,10 @@ Run the following command to see usage options:
 which returns:
 
 ```
-
-usage: mop.py [-h] [-c] [-s] [-M MEAN_DEPTH_MIN] [-x MAX_DEPTH] [-i MIN_DEPTH]
-              [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b
-              [BAMLIST] [-l POSITIONS_FILE] [-R POSITIONS_STRING]
+usage: mop.py [-h] [-c] [-s] [--pixy_mode] [-M MEAN_DEPTH_MIN] [-x MAX_DEPTH]
+              [-i MIN_DEPTH] [-m DEPTH_PROPORTION] [-Q MAP_QUALITY]
+              [-q BASE_QUALITY] -b [BAMLIST] [-l POSITIONS_FILE]
+              [-R POSITIONS_STRING]
 
 Produces bedfile of genomic locations that did or did not map reads
 sufficiently well. Bed regions are Written to standard out.
@@ -35,12 +34,17 @@ optional arguments:
                         contiguous regions.
   -s, --bad_sites       Switch to return sites which fail thresholds. Default
                         is to return passing sites.
+  --pixy_mode           Switch to produce output for pixy (reports every site
+                        and the number of individuals with passing quality
+                        thresholds).
   -M MEAN_DEPTH_MIN, --mean_depth_min MEAN_DEPTH_MIN
-                        Minimum mean depth across all individuals.
+                        Minimum mean depth across all individuals (ignored
+                        with pixy_mode).
   -x MAX_DEPTH, --max_depth MAX_DEPTH
                         Maximum number of bases allowed per individual after
                         accounting for low base and mapping quality. This flag
-                        should always be used in conjunction with -m.
+                        should always be used in conjunction with -m (ignored
+                        with pixy_mode).
   -i MIN_DEPTH, --min_depth MIN_DEPTH
                         Minimum number of bases required per individual after
                         accounting for low base and mapping quality. This flag
@@ -49,11 +53,11 @@ optional arguments:
                         Minimum proportion of individuals with site counts
                         greater than --min_depth that are required for site to
                         pass. Test is applied after accounting for low base
-                        and mapping quality.
+                        and mapping quality (ignored with pixy_mode).
   -Q MAP_QUALITY, --map_quality MAP_QUALITY
-                        Minimim mapping quality
+                        Minimim mapping quality.
   -q BASE_QUALITY, --base_quality BASE_QUALITY
-                        Minimim base quality
+                        Minimim base quality.
   -b [BAMLIST], --bamlist [BAMLIST]
                         List of bam files. One per line.
   -l POSITIONS_FILE, --positions_file POSITIONS_FILE
@@ -61,7 +65,8 @@ optional arguments:
                         "samtools depth".
   -R POSITIONS_STRING, --positions_string POSITIONS_STRING
                         Optional file of reference position to pass to
-                        "samtools depth". Requires input bam files to be indexed.
+                        "samtools depth". Requires input bam files to be
+                        indexed.
 
 ```
 
