@@ -12,16 +12,16 @@ def main():
     parser = argparse.ArgumentParser(description="Produces bedfile of genomic locations that did or did not map reads sufficiently well. Bed regions are Written to standard out.")
 
     parser.add_argument("-c", "--single_sites", action='store_true', 
-                help = "Output every base separately instead of joining contiguous regions.")
+                help = "Output every base separately instead of joining contiguous regions (ignored with pixy_mode).")
 
     parser.add_argument("-s", "--bad_sites", action='store_true', 
-                help = "Switch to return sites which fail thresholds. Default is to return passing sites.")
+                help = "Switch to return sites which fail thresholds. Default is to return passing sites (ignored with pixy_mode).")
 
     parser.add_argument("--pixy_mode", action='store_true', 
                 help = "Switch to produce output for pixy (reports every site and the number of individuals with passing quality thresholds).")
 
     parser.add_argument("-M", "--mean_depth_min", type = int, default=0,
-                help = "Minimum mean depth across all individuals (ignored with  pixy_mode).")
+                help = "Minimum mean depth across all individuals.")
 
     parser.add_argument("-x", "--max_depth", type = float, default = float("inf"),
                 help = "Maximum number of bases allowed per individual after accounting for low base and mapping quality. This flag should always be used in conjunction with -m (ignored with  pixy_mode).")
@@ -30,7 +30,7 @@ def main():
                 help = "Minimum number of bases required per individual after accounting for low base and mapping quality. This flag should always be used in conjunction with -m.")
 
     parser.add_argument("-m", "--depth_proportion", type = float, default=0, 
-                help = "Minimum proportion of individuals with site counts greater than --min_depth that are required for site to pass. Test is applied after accounting for low base and mapping quality (ignored with  pixy_mode).")
+                help = "Minimum proportion of individuals with site counts greater than --min_depth that are required for site to pass. Test is applied after accounting for low base and mapping quality.")
 
     parser.add_argument("-Q", "--map_quality", type = int, default=0, 
                 help = "Minimim mapping quality.")
@@ -45,7 +45,7 @@ def main():
                 help='Optional file of reference position to pass to "samtools depth".')
 
     parser.add_argument('-R', '--positions_string', type=str, 
-                help='Optional file of reference position to pass to "samtools depth". Requires input bam files to be indexed.')
+                help='Optional file of reference position to pass to "samtools depth". Requires input bam files to be indexed. Format is chromosome:start-end.')
 
 
     args = parser.parse_args()
@@ -84,8 +84,13 @@ def main():
         pop_bam = parse_bam['pop_bam']
         idx = parse_bam['idx'] 
         depth = np.array([int(pop_bam[i]) for i in idx])
-        #number of individuals with depth greater than the user-specified minimum
-        n_ind = np.sum(depth >= args.min_depth) 
+        
+        n_ind = 0
+        if np.mean(depth) >= args.mean_depth_min:
+            ind_lgl = np.logical_and(depth >= args.min_depth, depth <= args.max_depth)
+            if np.mean(ind_lgl) >= args.depth_proportion:
+                #number of individuals with depth between the user-specified min and max
+                n_ind = np.sum(ind_lgl) 
         
         return n_ind
 

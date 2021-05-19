@@ -1,0 +1,3 @@
+data/bam1.bam
+data/bam2.bam
+data/bam3.bam
