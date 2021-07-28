@@ -2,7 +2,7 @@
 
 Simple tool for capturing alignment regions with sufficient quality for genotyping.
 
-This script has only been tested on Linux systems.
+This script has only been tested on Unix systems.
 
 Requires Python3 with libraries: `argparse`, `numpy` `os`, `re`, `io`, `subprocess`.
 Requires fully installed version of `samtools` with the `depth` utility.
@@ -25,7 +25,7 @@ which returns:
 usage: mop [-h] [-c] [-s] [--pixy_mode] [-M MEAN_DEPTH_MIN] [-x MAX_DEPTH] [-i MIN_DEPTH] [-m DEPTH_PROPORTION] [-Q MAP_QUALITY] [-q BASE_QUALITY] -b [BAMLIST]
            [-l POSITIONS_FILE] [-R POSITIONS_STRING]
 
-Produces bedfile of genomic locations that did or did not map reads sufficiently well. Bed regions are Written to standard out.
+Produces bedfile of genomic locations that did or did not map reads sufficiently well. Regions are written to standard out.
 
 optional arguments:
   -h, --help            show this help message and exit
