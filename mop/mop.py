@@ -97,7 +97,7 @@ def main():
     def pixy_printer(chrom, start, end, n_ind):
             if n_ind > 0:
                 if start > 0 and  end > 0:
-                    print(f"{chrom}\t{start-1}\t{end}\t{n_ind}")
+                    print(f"{chrom}\t{end}\t{n_ind}")
 
 
     if args.positions_file:	
