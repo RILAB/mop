@@ -4,6 +4,7 @@ import os
 import re
 import io
 import subprocess
+import gzip
 
 #from parse_read import parse_read
 
